@@ -1,0 +1,340 @@
+@prefix arch:   <https://example.org/aicog/architecture#> .
+@prefix ctx:    <https://example.org/aicog/context#> .
+@prefix eval:   <https://example.org/aicog/evaluation#> .
+@prefix dec:    <https://example.org/aicog/decision#> .
+@prefix auth:   <https://example.org/aicog/authorization#> .
+@prefix exec:   <https://example.org/aicog/execution#> .
+@prefix assure: <https://example.org/aicog/assurance#> .
+@prefix learn:  <https://example.org/aicog/learning#> .
+@prefix svc:    <https://example.org/aicog/service#> .
+@prefix intent: <https://example.org/aicog/intent#> .
+@prefix policy: <https://example.org/aicog/policy#> .
+@prefix plan:   <https://example.org/aicog/plan#> .
+@prefix infer:  <https://example.org/aicog/inference#> .
+@prefix trace:  <https://example.org/aicog/trace#> .
+@prefix domain: <https://example.org/aicog/domain#> .
+@prefix psl:    <https://example.org/aicog/psl#> .
+@prefix agent:  <https://example.org/aicog/agent#> .
+@prefix cdt:    <https://example.org/aicog/cdt#> .
+@prefix prov:   <http://www.w3.org/ns/prov#> .
+@prefix sosa:   <http://www.w3.org/ns/sosa/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Appendix A5 — Runtime Context focused ontology
+# Protégé view: arch:ContextObject and ctx:ControlServiceContext_001
+#################################################################
+
+<https://example.org/aicog/appendix-a/a5>
+    a owl:Ontology ;
+    rdfs:label "Appendix A5 — Runtime Context and ControlServiceContext_001"@en ;
+    rdfs:comment "Reviewer-revised, self-contained OWL/Turtle fragment for the Protégé view of arch:ContextObject and ctx:ControlServiceContext_001. The file uses the common Appendix A namespace scheme and makes numeric unit conventions explicit."@en ;
+    owl:versionInfo "1.1.0" .
+
+#################################################################
+# TBox — core semantic classes
+#################################################################
+
+arch:CognitiveArtifact
+    a owl:Class ;
+    rdfs:label "Cognitive Artifact"@en ;
+    rdfs:comment "Machine-interpretable artifact produced or consumed across the autonomous cognitive lifecycle."@en .
+
+arch:EvidenceArtifact
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evidence Artifact"@en .
+
+arch:RuntimeEvidence
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Runtime Evidence"@en ;
+    rdfs:comment "Observation, event, measurement, state assertion, or other operational evidence used to ground cognition."@en .
+
+arch:OperationalEvent
+    a owl:Class ;
+    rdfs:subClassOf arch:RuntimeEvidence ;
+    rdfs:label "Operational Event"@en .
+
+arch:ContextObject
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Context Object"@en ;
+    rdfs:comment "Semantically integrated Runtime Context assembled from evidence and relevant knowledge for a declared cognitive task."@en .
+
+arch:OperationalContext
+    a owl:Class ;
+    rdfs:subClassOf arch:ContextObject ;
+    rdfs:label "Operational Context"@en ;
+    rdfs:comment "A Context Object describing the current operational situation of a service, resource, or domain."@en .
+
+arch:Service
+    a owl:Class ;
+    rdfs:label "Service"@en .
+
+arch:OperationalService
+    a owl:Class ;
+    rdfs:subClassOf arch:Service ;
+    rdfs:label "Operational Service"@en .
+
+arch:Intent
+    a owl:Class ;
+    rdfs:label "Intent"@en .
+
+arch:Objective
+    a owl:Class ;
+    rdfs:label "Objective"@en .
+
+arch:Policy
+    a owl:Class ;
+    rdfs:label "Policy"@en .
+
+arch:Constraint
+    a owl:Class ;
+    rdfs:label "Constraint"@en .
+
+arch:OperationalDomain
+    a owl:Class ;
+    rdfs:label "Operational Domain"@en ;
+    rdfs:comment "Administrative or operational domain contributing evidence or resources to the end-to-end service."@en .
+
+#################################################################
+# TBox — object properties
+#################################################################
+
+arch:representsSituation
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ContextObject ;
+    rdfs:range arch:Service ;
+    rdfs:label "represents situation"@en ;
+    rdfs:comment "Identifies the service or operational situation represented by a Context Object."@en .
+
+arch:hasEvidence
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ContextObject ;
+    rdfs:range arch:RuntimeEvidence ;
+    rdfs:label "has evidence"@en ;
+    rdfs:comment "Links a Context Object to operational evidence relevant to the cognitive task."@en .
+
+arch:hasIntent
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ContextObject ;
+    rdfs:range arch:Intent ;
+    rdfs:label "has intent"@en .
+
+arch:governedBy
+    a owl:ObjectProperty ;
+    rdfs:label "governed by"@en ;
+    rdfs:comment "Associates an artifact or operational object with the policy that governs its interpretation or use."@en .
+
+arch:hasObjective
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Intent ;
+    rdfs:range arch:Objective ;
+    rdfs:label "has objective"@en .
+
+arch:hasConstraint
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Policy ;
+    rdfs:range arch:Constraint ;
+    rdfs:label "has constraint"@en .
+
+arch:affectsService
+    a owl:ObjectProperty ;
+    rdfs:domain arch:RuntimeEvidence ;
+    rdfs:range arch:Service ;
+    rdfs:label "affects service"@en .
+
+arch:originatesInDomain
+    a owl:ObjectProperty ;
+    rdfs:domain arch:RuntimeEvidence ;
+    rdfs:range arch:OperationalDomain ;
+    rdfs:label "originates in domain"@en ;
+    rdfs:comment "Identifies the operational or administrative domain from which evidence originates."@en .
+
+#################################################################
+# TBox — datatype properties
+#################################################################
+
+arch:hasConfidence
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has confidence"@en ;
+    rdfs:comment "Normalized dimensionless confidence on a 0–1 scale in this reference model. For example, 0.95 represents 95 percent confidence."@en .
+
+arch:observedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed latency in milliseconds"@en ;
+    rdfs:comment "Observed latency value expressed in milliseconds."@en .
+
+arch:observedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed packet loss percent"@en ;
+    rdfs:comment "Observed packet loss expressed in percentage points. For example, 0.18 represents 0.18 percent packet loss, not a 0.18 fractional ratio."@en .
+
+arch:observedAt
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "observed at"@en .
+
+arch:hasStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has status"@en .
+
+arch:hasDescription
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description"@en .
+
+arch:knowledgeVersion
+    a owl:DatatypeProperty ;
+    rdfs:domain arch:ContextObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "knowledge version"@en .
+
+arch:ontologyVersion
+    a owl:DatatypeProperty ;
+    rdfs:domain arch:ContextObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "ontology version"@en .
+
+#################################################################
+# ABox — operational domains
+#################################################################
+
+domain:RAN_A
+    a arch:OperationalDomain ;
+    rdfs:label "RAN Domain A"@en .
+
+domain:Transport_A
+    a arch:OperationalDomain ;
+    rdfs:label "Transport Domain A"@en .
+
+domain:EdgeCloud_A
+    a arch:OperationalDomain ;
+    rdfs:label "Edge/Cloud Domain A"@en .
+
+#################################################################
+# ABox — service, intent, objectives, policy, and constraints
+#################################################################
+
+svc:IndustrialControlService_001
+    a arch:OperationalService ;
+    rdfs:label "Industrial Control Service 001"@en .
+
+intent:LowLatencyContinuityIntent_001
+    a arch:Intent ;
+    rdfs:label "Low-Latency Continuity Intent 001"@en ;
+    arch:hasObjective intent:LatencyObjective_001,
+                      intent:PacketLossObjective_001 .
+
+intent:LatencyObjective_001
+    a arch:Objective ;
+    rdfs:label "Latency Objective 001"@en ;
+    arch:hasDescription "End-to-end latency must remain below 20 ms."@en .
+
+intent:PacketLossObjective_001
+    a arch:Objective ;
+    rdfs:label "Packet-Loss Objective 001"@en ;
+    arch:hasDescription "Packet loss must remain below 0.1 percent."@en .
+
+policy:ControlServicePolicy_001
+    a arch:Policy ;
+    rdfs:label "Control Service Policy 001"@en ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001,
+                       policy:MaximumRiskConstraint_001 .
+
+policy:NoInterruptionConstraint_001
+    a arch:Constraint ;
+    rdfs:label "No Interruption Constraint 001"@en ;
+    arch:hasDescription "The active industrial control session must not be interrupted."@en .
+
+policy:MaximumRiskConstraint_001
+    a arch:Constraint ;
+    rdfs:label "Maximum Risk Constraint 001"@en ;
+    arch:hasDescription "Any selected response must remain within the authorized operational risk boundary."@en .
+
+#################################################################
+# ABox — runtime observations and operational events
+#################################################################
+
+ctx:LatencyObservation_001
+    a arch:RuntimeEvidence,
+      sosa:Observation ;
+    rdfs:label "Latency Observation 001"@en ;
+    arch:affectsService svc:IndustrialControlService_001 ;
+    arch:originatesInDomain domain:Transport_A ;
+    arch:observedLatencyMs "31.0"^^xsd:decimal ;
+    arch:hasConfidence "0.99"^^xsd:decimal ;
+    arch:observedAt "2026-09-15T12:00:00Z"^^xsd:dateTime .
+
+ctx:PacketLossObservation_001
+    a arch:RuntimeEvidence,
+      sosa:Observation ;
+    rdfs:label "Packet-Loss Observation 001"@en ;
+    arch:affectsService svc:IndustrialControlService_001 ;
+    arch:originatesInDomain domain:Transport_A ;
+    arch:observedPacketLossPercent "0.18"^^xsd:decimal ;
+    arch:hasConfidence "0.98"^^xsd:decimal ;
+    arch:observedAt "2026-09-15T12:00:00Z"^^xsd:dateTime .
+
+ctx:TransportMaintenance_001
+    a arch:OperationalEvent ;
+    rdfs:label "Transport Maintenance 001"@en ;
+    arch:affectsService svc:IndustrialControlService_001 ;
+    arch:originatesInDomain domain:Transport_A ;
+    arch:hasStatus "active-capacity-reduction" ;
+    arch:observedAt "2026-09-15T11:52:00Z"^^xsd:dateTime .
+
+ctx:EdgeSaturationEvent_001
+    a arch:OperationalEvent ;
+    rdfs:label "Edge Saturation Event 001"@en ;
+    arch:affectsService svc:IndustrialControlService_001 ;
+    arch:originatesInDomain domain:EdgeCloud_A ;
+    arch:hasStatus "sustained-compute-saturation" ;
+    arch:observedAt "2026-09-15T11:58:00Z"^^xsd:dateTime .
+
+ctx:RANCongestionEvent_001
+    a arch:OperationalEvent ;
+    rdfs:label "RAN Congestion Event 001"@en ;
+    arch:affectsService svc:IndustrialControlService_001 ;
+    arch:originatesInDomain domain:RAN_A ;
+    arch:hasStatus "high-utilization" ;
+    arch:observedAt "2026-09-15T11:57:00Z"^^xsd:dateTime .
+
+#################################################################
+# ABox — focal Context Object for the Protégé view
+#################################################################
+
+ctx:ControlServiceContext_001
+    a arch:ContextObject,
+      arch:OperationalContext ;
+    rdfs:label "Control Service Context 001"@en ;
+    rdfs:comment "Semantically integrated Runtime Context for the multi-domain industrial-control-service degradation scenario."@en ;
+    arch:representsSituation svc:IndustrialControlService_001 ;
+    arch:hasEvidence ctx:LatencyObservation_001,
+                     ctx:PacketLossObservation_001,
+                     ctx:TransportMaintenance_001,
+                     ctx:EdgeSaturationEvent_001,
+                     ctx:RANCongestionEvent_001 ;
+    arch:hasIntent intent:LowLatencyContinuityIntent_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasConfidence "0.95"^^xsd:decimal ;
+    arch:knowledgeVersion "SKF-Reference-1.1" ;
+    arch:ontologyVersion "AICOG-Reference-1.1" .
+
+#################################################################
+# Semantic-unit note
+#################################################################
+
+arch:NumericUnitConvention
+    a owl:NamedIndividual ;
+    rdfs:label "Numeric Unit Convention"@en ;
+    rdfs:comment "In this reference model, confidence values use a normalized 0–1 scale; packet-loss properties whose names end in Percent use percentage-point values. Thus 0.95 confidence means 95 percent confidence, while 0.18 packet loss means 0.18 percent packet loss."@en .

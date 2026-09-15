@@ -1,0 +1,624 @@
+@prefix arch:   <https://example.org/aicog/architecture#> .
+@prefix ctx:    <https://example.org/aicog/context#> .
+@prefix eval:   <https://example.org/aicog/evaluation#> .
+@prefix dec:    <https://example.org/aicog/decision#> .
+@prefix auth:   <https://example.org/aicog/authorization#> .
+@prefix exec:   <https://example.org/aicog/execution#> .
+@prefix assure: <https://example.org/aicog/assurance#> .
+@prefix learn:  <https://example.org/aicog/learning#> .
+@prefix svc:    <https://example.org/aicog/service#> .
+@prefix intent: <https://example.org/aicog/intent#> .
+@prefix policy: <https://example.org/aicog/policy#> .
+@prefix plan:   <https://example.org/aicog/plan#> .
+@prefix infer:  <https://example.org/aicog/inference#> .
+@prefix trace:  <https://example.org/aicog/trace#> .
+@prefix domain: <https://example.org/aicog/domain#> .
+@prefix psl:    <https://example.org/aicog/psl#> .
+@prefix agent:  <https://example.org/aicog/agent#> .
+@prefix cdt:    <https://example.org/aicog/cdt#> .
+@prefix prov:   <http://www.w3.org/ns/prov#> .
+@prefix sosa:   <http://www.w3.org/ns/sosa/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Appendix A6 — Evaluation, Candidate Assessment, Decision,
+# Governance Assessment, Authorization, and Execution Contract
+#################################################################
+
+<https://example.org/aicog/appendix-a/a6>
+    a owl:Ontology ;
+    rdfs:label "Appendix A6 — Evaluation, Decision, Authorization, and Execution Contract"@en ;
+    rdfs:comment "Reviewer-revised, self-contained OWL/Turtle fragment for the Appendix A6 Protégé view. It preserves the semantic boundaries Evaluation Result != Decision Result != Authorization != Execution Contract, adds Candidate Assessment as a specialized Evaluation Result, and populates governance risk and trust scores."@en ;
+    owl:versionInfo "1.1.0" .
+
+#################################################################
+# Core classes
+#################################################################
+
+arch:CognitiveArtifact
+    a owl:Class ;
+    rdfs:label "Cognitive Artifact"@en .
+
+arch:EvidenceArtifact
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evidence Artifact"@en .
+
+arch:ContextObject
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Context Object"@en .
+
+arch:InferenceResult
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Inference Result"@en .
+
+arch:EvaluationContext
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evaluation Context"@en ;
+    rdfs:comment "Declares the target, intent, objectives, evidence, policies, constraints, and semantic scope under which an evaluation is meaningful."@en .
+
+arch:EvaluationResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evaluation Result"@en ;
+    rdfs:comment "Conclusion of an evaluation performed under a declared Evaluation Context. An Evaluation Result is not a Decision Result."@en .
+
+arch:CandidateAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:EvaluationResult ;
+    rdfs:label "Candidate Assessment"@en ;
+    rdfs:comment "Candidate Plan Assessment represented as a specialized Evaluation Result. It evaluates a Candidate Plan using predictive and other evidence but does not select, authorize, or execute the plan."@en .
+
+arch:CandidatePlan
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Candidate Plan"@en .
+
+arch:Prediction
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Prediction"@en ;
+    rdfs:comment "Predictive evidence concerning a candidate or future state. Prediction is distinct from evaluation, decision, and authorization."@en .
+
+arch:DecisionResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Decision Result"@en ;
+    rdfs:comment "Records the selected candidate or governed decision conclusion. A Decision Result is not Authorization and does not itself permit execution."@en .
+
+arch:GovernanceAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Governance Assessment"@en ;
+    rdfs:comment "Evaluates a proposed Decision Result against applicable policy, trust, risk, regulatory, mandate, and human-oversight conditions. A favorable assessment may be a prerequisite for Authorization but is not itself Authorization."@en .
+
+arch:Authorization
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Authorization"@en ;
+    rdfs:comment "Explicit artifact granting, denying, or conditioning authority for a defined Decision Result and scope. Authorization precedes Execution Contract formation."@en .
+
+arch:ExecutionContract
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Execution Contract"@en ;
+    rdfs:comment "Machine-interpretable specification derived from an authorized Decision Result. It identifies what operational contributions may be realized, under which constraints and authorization lineage."@en .
+
+arch:ExecutionAction
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Execution Action"@en .
+
+arch:Service
+    a owl:Class ;
+    rdfs:label "Service"@en .
+
+arch:OperationalService
+    a owl:Class ;
+    rdfs:subClassOf arch:Service ;
+    rdfs:label "Operational Service"@en .
+
+arch:Intent
+    a owl:Class ;
+    rdfs:label "Intent"@en .
+
+arch:Objective
+    a owl:Class ;
+    rdfs:label "Objective"@en .
+
+arch:Policy
+    a owl:Class ;
+    rdfs:label "Policy"@en .
+
+arch:Constraint
+    a owl:Class ;
+    rdfs:label "Constraint"@en .
+
+arch:CognitiveAgent
+    a owl:Class ;
+    rdfs:label "Cognitive Agent"@en .
+
+#################################################################
+# Object properties
+#################################################################
+
+arch:hasEvidence
+    a owl:ObjectProperty ;
+    rdfs:label "has evidence"@en .
+
+arch:resultOf
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:EvaluationContext ;
+    rdfs:label "result of"@en .
+
+arch:evaluatesTarget
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationContext ;
+    rdfs:label "evaluates target"@en .
+
+arch:evaluatesCandidate
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:CandidatePlan ;
+    rdfs:label "evaluates candidate"@en .
+
+arch:supportedByPrediction
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:Prediction ;
+    rdfs:label "supported by prediction"@en .
+
+arch:predictsFor
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Prediction ;
+    rdfs:range arch:CandidatePlan ;
+    rdfs:label "predicts for"@en .
+
+arch:derivedFrom
+    a owl:ObjectProperty ;
+    rdfs:label "derived from"@en .
+
+arch:hasIntent
+    a owl:ObjectProperty ;
+    rdfs:range arch:Intent ;
+    rdfs:label "has intent"@en .
+
+arch:hasObjective
+    a owl:ObjectProperty ;
+    rdfs:range arch:Objective ;
+    rdfs:label "has objective"@en .
+
+arch:governedBy
+    a owl:ObjectProperty ;
+    rdfs:range arch:Policy ;
+    rdfs:label "governed by"@en .
+
+arch:hasConstraint
+    a owl:ObjectProperty ;
+    rdfs:range arch:Constraint ;
+    rdfs:label "has constraint"@en .
+
+arch:basedOnEvaluation
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionResult ;
+    rdfs:range arch:EvaluationResult ;
+    rdfs:label "based on evaluation"@en .
+
+arch:selectedCandidate
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionResult ;
+    rdfs:range arch:CandidatePlan ;
+    rdfs:label "selected candidate"@en .
+
+arch:assessesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:GovernanceAssessment ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "assesses decision"@en .
+
+arch:hasGovernanceAssessment
+    a owl:ObjectProperty ;
+    rdfs:label "has governance assessment"@en ;
+    rdfs:range arch:GovernanceAssessment ;
+    rdfs:comment "Links a Decision Result or Authorization to the governance assessment relevant to authorization."@en .
+
+arch:authorizesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Authorization ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "authorizes decision"@en .
+
+arch:authorizedBy
+    a owl:ObjectProperty ;
+    rdfs:label "authorized by"@en ;
+    rdfs:comment "For Authorization, identifies the authorizing authority. For Execution Contract, identifies the Authorization on which realization authority depends."@en .
+
+arch:appliesTo
+    a owl:ObjectProperty ;
+    rdfs:label "applies to"@en .
+
+arch:realizesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ExecutionContract ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "realizes decision"@en .
+
+arch:requiresAction
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ExecutionContract ;
+    rdfs:range arch:ExecutionAction ;
+    rdfs:label "requires action"@en .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+arch:hasConfidence
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has confidence"@en ;
+    rdfs:comment "Normalized dimensionless confidence on a 0–1 scale in this reference scenario. For example, 0.93 represents 93 percent confidence."@en .
+
+arch:predictedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted latency in milliseconds"@en ;
+    rdfs:comment "Predicted latency expressed in milliseconds."@en .
+
+arch:predictedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted packet loss percent"@en ;
+    rdfs:comment "Predicted packet loss expressed in percentage points. For example, 0.06 represents 0.06 percent packet loss, not a 0.06 fractional ratio."@en .
+
+arch:evaluationStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "evaluation status"@en .
+
+arch:hasDecisionStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has decision status"@en .
+
+arch:hasRiskScore
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has risk score"@en ;
+    rdfs:comment "Operational or governance risk score. In this reference scenario a normalized 0–1 scale is used, with larger values indicating greater assessed risk. The scale is model-dependent and is not automatically a calibrated probability."@en .
+
+arch:hasTrustScore
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has trust score"@en ;
+    rdfs:comment "Trust assessment score. In this reference scenario a normalized 0–1 scale is used, with larger values indicating greater assessed trust. The scale is model-dependent and is not automatically a calibrated probability."@en .
+
+arch:governanceStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "governance status"@en .
+
+arch:authorizationStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "authorization status"@en .
+
+arch:executionContractStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "execution contract status"@en .
+
+#################################################################
+# OWL restrictions preserving semantic boundaries
+#################################################################
+
+arch:EvaluationResult
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:resultOf ;
+        owl:someValuesFrom arch:EvaluationContext
+    ] .
+
+arch:Authorization
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:authorizesDecision ;
+        owl:someValuesFrom arch:DecisionResult
+    ] .
+
+arch:ExecutionContract
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:realizesDecision ;
+        owl:someValuesFrom arch:DecisionResult
+    ] .
+
+#################################################################
+# ABox — supporting service, intent, policy, context, and evidence
+#################################################################
+
+svc:IndustrialControlService_001
+    a arch:OperationalService ;
+    rdfs:label "Industrial Control Service 001"@en .
+
+intent:LowLatencyContinuityIntent_001
+    a arch:Intent ;
+    rdfs:label "Low-Latency Continuity Intent 001"@en ;
+    arch:hasObjective intent:LatencyObjective_001,
+                      intent:PacketLossObjective_001 .
+
+intent:LatencyObjective_001
+    a arch:Objective ;
+    rdfs:label "Latency Objective 001"@en ;
+    rdfs:comment "End-to-end latency must remain below 20 ms."@en .
+
+intent:PacketLossObjective_001
+    a arch:Objective ;
+    rdfs:label "Packet-Loss Objective 001"@en ;
+    rdfs:comment "Packet loss must remain below 0.1 percent."@en .
+
+policy:ControlServicePolicy_001
+    a arch:Policy ;
+    rdfs:label "Control Service Policy 001"@en ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 .
+
+policy:NoInterruptionConstraint_001
+    a arch:Constraint ;
+    rdfs:label "No Interruption Constraint 001"@en ;
+    rdfs:comment "The active industrial control session must not be interrupted."@en .
+
+ctx:ControlServiceContext_001
+    a arch:ContextObject ;
+    rdfs:label "Control Service Context 001"@en ;
+    arch:hasIntent intent:LowLatencyContinuityIntent_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasConfidence "0.95"^^xsd:decimal .
+
+infer:CrossDomainDegradation_001
+    a arch:InferenceResult ;
+    rdfs:label "Cross-Domain Degradation 001"@en ;
+    arch:derivedFrom ctx:ControlServiceContext_001 ;
+    arch:hasConfidence "0.91"^^xsd:decimal ;
+    rdfs:comment "Combined RAN congestion, transport capacity reduction, and edge saturation contribute to end-to-end degradation."@en .
+
+#################################################################
+# Stage 3 — Evaluation Context and initial Evaluation Result
+#################################################################
+
+eval:EvaluationContext_001
+    a arch:EvaluationContext ;
+    rdfs:label "Evaluation Context 001"@en ;
+    arch:evaluatesTarget svc:IndustrialControlService_001 ;
+    arch:hasIntent intent:LowLatencyContinuityIntent_001 ;
+    arch:hasObjective intent:LatencyObjective_001,
+                      intent:PacketLossObjective_001 ;
+    arch:hasEvidence infer:CrossDomainDegradation_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 .
+
+eval:EvaluationResult_001
+    a arch:EvaluationResult ;
+    rdfs:label "Evaluation Result 001 — Intent Violated"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluationStatus "intent-violated" ;
+    arch:hasConfidence "0.96"^^xsd:decimal ;
+    arch:hasEvidence infer:CrossDomainDegradation_001 ;
+    rdfs:comment "This result concludes that the active intent is violated. It does not select a remediation plan."@en .
+
+#################################################################
+# Stage 4 — Planning, Prediction, and Candidate Assessment
+#################################################################
+
+plan:RANSteering_001
+    a arch:CandidatePlan ;
+    rdfs:label "RAN Steering 001"@en ;
+    rdfs:comment "Steer selected service traffic to lower-utilization RAN resources."@en .
+
+plan:TransportReroute_001
+    a arch:CandidatePlan ;
+    rdfs:label "Transport Reroute 001"@en ;
+    rdfs:comment "Reroute service traffic around the capacity-reduced transport segment."@en .
+
+plan:EdgeMigration_001
+    a arch:CandidatePlan ;
+    rdfs:label "Edge Migration 001"@en ;
+    rdfs:comment "Move the control-processing workload to a nearby edge site."@en .
+
+plan:CoordinatedRecovery_001
+    a arch:CandidatePlan ;
+    rdfs:label "Coordinated Recovery 001"@en ;
+    rdfs:comment "Combine RAN steering, transport reroute, and edge workload migration under one end-to-end coordinated plan."@en .
+
+cdt:RANSteeringPrediction_001
+    a arch:Prediction ;
+    rdfs:label "RAN Steering Prediction 001"@en ;
+    arch:predictsFor plan:RANSteering_001 ;
+    arch:predictedLatencyMs "24"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.13"^^xsd:decimal ;
+    arch:hasConfidence "0.88"^^xsd:decimal .
+
+cdt:TransportReroutePrediction_001
+    a arch:Prediction ;
+    rdfs:label "Transport Reroute Prediction 001"@en ;
+    arch:predictsFor plan:TransportReroute_001 ;
+    arch:predictedLatencyMs "23"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.11"^^xsd:decimal ;
+    arch:hasConfidence "0.90"^^xsd:decimal .
+
+cdt:EdgeMigrationPrediction_001
+    a arch:Prediction ;
+    rdfs:label "Edge Migration Prediction 001"@en ;
+    arch:predictsFor plan:EdgeMigration_001 ;
+    arch:predictedLatencyMs "22"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.10"^^xsd:decimal ;
+    arch:hasConfidence "0.91"^^xsd:decimal .
+
+cdt:RANPrediction_001
+    a arch:Prediction ;
+    rdfs:label "RAN Domain Prediction 001"@en .
+
+cdt:TransportPrediction_001
+    a arch:Prediction ;
+    rdfs:label "Transport Domain Prediction 001"@en .
+
+cdt:EdgePrediction_001
+    a arch:Prediction ;
+    rdfs:label "Edge Domain Prediction 001"@en .
+
+cdt:FederatedPrediction_001
+    a arch:Prediction ;
+    rdfs:label "Federated Prediction 001"@en ;
+    arch:predictsFor plan:CoordinatedRecovery_001 ;
+    arch:predictedLatencyMs "16"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.06"^^xsd:decimal ;
+    arch:hasConfidence "0.93"^^xsd:decimal ;
+    arch:derivedFrom cdt:RANPrediction_001,
+                     cdt:TransportPrediction_001,
+                     cdt:EdgePrediction_001 ;
+    rdfs:comment "Federated predictive evidence composed from attributable domain CDT predictions subject to semantic, temporal, and boundary synchronization."@en .
+
+eval:CandidateAssessment_001
+    a arch:CandidateAssessment ;
+    rdfs:label "Candidate Plan Assessment 001 — RAN Steering"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluatesCandidate plan:RANSteering_001 ;
+    arch:supportedByPrediction cdt:RANSteeringPrediction_001 ;
+    arch:evaluationStatus "objectives-not-satisfied" ;
+    arch:hasConfidence "0.88"^^xsd:decimal ;
+    rdfs:comment "Predicted latency of 24 ms and packet loss of 0.13 percent do not satisfy the declared end-to-end objectives."@en .
+
+eval:CandidateAssessment_002
+    a arch:CandidateAssessment ;
+    rdfs:label "Candidate Plan Assessment 002 — Transport Reroute"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluatesCandidate plan:TransportReroute_001 ;
+    arch:supportedByPrediction cdt:TransportReroutePrediction_001 ;
+    arch:evaluationStatus "objectives-not-satisfied" ;
+    arch:hasConfidence "0.90"^^xsd:decimal ;
+    rdfs:comment "Predicted latency of 23 ms and packet loss of 0.11 percent do not satisfy the declared end-to-end objectives."@en .
+
+eval:CandidateAssessment_003
+    a arch:CandidateAssessment ;
+    rdfs:label "Candidate Plan Assessment 003 — Edge Migration"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluatesCandidate plan:EdgeMigration_001 ;
+    arch:supportedByPrediction cdt:EdgeMigrationPrediction_001 ;
+    arch:evaluationStatus "objectives-not-satisfied" ;
+    arch:hasConfidence "0.91"^^xsd:decimal ;
+    rdfs:comment "Predicted latency of 22 ms fails the latency objective; predicted packet loss of 0.10 percent is not below the strict 0.1 percent objective."@en .
+
+eval:CandidateAssessment_004
+    a arch:CandidateAssessment ;
+    rdfs:label "Candidate Plan Assessment 004 — Coordinated Recovery"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluatesCandidate plan:CoordinatedRecovery_001 ;
+    arch:supportedByPrediction cdt:FederatedPrediction_001 ;
+    arch:evaluationStatus "objectives-satisfied" ;
+    arch:hasConfidence "0.93"^^xsd:decimal ;
+    rdfs:comment "The coordinated recovery plan is predicted to satisfy both latency and packet-loss objectives while preserving the continuity constraint. This assessment does not select or authorize the plan."@en .
+
+#################################################################
+# Stage 5 — Decision Result, Governance Assessment, Authorization
+#################################################################
+
+dec:DecisionResult_001
+    a arch:DecisionResult ;
+    rdfs:label "Decision Result 001 — Coordinated Recovery Selected"@en ;
+    arch:basedOnEvaluation eval:CandidateAssessment_004 ;
+    arch:selectedCandidate plan:CoordinatedRecovery_001 ;
+    arch:hasDecisionStatus "selected" ;
+    arch:hasConfidence "0.92"^^xsd:decimal ;
+    rdfs:comment "The CKP selects the coordinated recovery plan after candidate assessment. Selection is not authorization."@en .
+
+agent:GovernanceAgent_001
+    a arch:CognitiveAgent ;
+    rdfs:label "Governance Agent 001"@en .
+
+auth:GovernanceAssessment_001
+    a arch:GovernanceAssessment ;
+    rdfs:label "Governance Assessment 001"@en ;
+    arch:assessesDecision dec:DecisionResult_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 ;
+    arch:hasRiskScore "0.18"^^xsd:decimal ;
+    arch:hasTrustScore "0.91"^^xsd:decimal ;
+    arch:governanceStatus "acceptable" ;
+    rdfs:comment "Illustrative governance assessment. Risk and trust scores use a model-dependent normalized 0–1 scale in this reference scenario; they are not automatically calibrated probabilities. A favorable Governance Assessment is not itself Authorization."@en .
+
+dec:DecisionResult_001
+    arch:hasGovernanceAssessment auth:GovernanceAssessment_001 .
+
+auth:Authorization_001
+    a arch:Authorization ;
+    rdfs:label "Authorization 001"@en ;
+    arch:authorizesDecision dec:DecisionResult_001 ;
+    arch:hasGovernanceAssessment auth:GovernanceAssessment_001 ;
+    arch:authorizationStatus "granted" ;
+    arch:authorizedBy agent:GovernanceAgent_001 ;
+    arch:appliesTo svc:IndustrialControlService_001 ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 ;
+    rdfs:comment "Authorization explicitly grants authority for the selected Decision Result within the declared scope and constraints. It is separate from both the Decision Result and the Execution Contract."@en .
+
+#################################################################
+# Stage 6 — Execution Contract
+#################################################################
+
+exec:RANSteeringAction_001
+    a arch:ExecutionAction ;
+    rdfs:label "RAN Steering Action 001"@en ;
+    rdfs:comment "Apply service-specific traffic steering."@en .
+
+exec:TransportRerouteAction_001
+    a arch:ExecutionAction ;
+    rdfs:label "Transport Reroute Action 001"@en ;
+    rdfs:comment "Activate the alternate transport path."@en .
+
+exec:EdgeMigrationAction_001
+    a arch:ExecutionAction ;
+    rdfs:label "Edge Migration Action 001"@en ;
+    rdfs:comment "Migrate the control workload to the designated alternate edge site."@en .
+
+exec:ExecutionContract_001
+    a arch:ExecutionContract ;
+    rdfs:label "Execution Contract 001"@en ;
+    arch:realizesDecision dec:DecisionResult_001 ;
+    arch:authorizedBy auth:Authorization_001 ;
+    arch:appliesTo svc:IndustrialControlService_001 ;
+    arch:requiresAction exec:RANSteeringAction_001,
+                        exec:TransportRerouteAction_001,
+                        exec:EdgeMigrationAction_001 ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 ;
+    arch:executionContractStatus "ready-for-realization" ;
+    rdfs:comment "The Execution Contract converts the authorized Decision Result into machine-interpretable operational contributions. Operational realization remains outside the semantic decision artifact itself."@en .
+
+#################################################################
+# Explicit semantic-boundary statements
+#################################################################
+
+arch:SemanticBoundaryDistinction_001
+    a owl:NamedIndividual ;
+    rdfs:label "Evaluation is not Decision"@en ;
+    rdfs:comment "Evaluation Result and Candidate Assessment express semantic conclusions; they do not select a plan unless a separate Decision Result is formed."@en .
+
+arch:SemanticBoundaryDistinction_002
+    a owl:NamedIndividual ;
+    rdfs:label "Decision is not Authorization"@en ;
+    rdfs:comment "A Decision Result may identify the preferred candidate while Authorization separately determines whether that decision is permitted to progress."@en .
+
+arch:SemanticBoundaryDistinction_003
+    a owl:NamedIndividual ;
+    rdfs:label "Authorization precedes Execution Contract"@en ;
+    rdfs:comment "Authorization grants authority; an Execution Contract then specifies the authorized operational realization semantics. Neither artifact is the realized operational outcome."@en .
+
+arch:NumericUnitConvention_A6
+    a owl:NamedIndividual ;
+    rdfs:label "Numeric Unit Convention — A6"@en ;
+    rdfs:comment "Confidence, and the illustrative risk and trust scores in this reference scenario, use normalized 0–1 scales. Packet-loss properties whose names end in Percent use percentage-point values; for example, 0.06 means 0.06 percent packet loss."@en .

@@ -1,0 +1,492 @@
+@prefix arch:   <https://example.org/aicog/architecture#> .
+@prefix ctx:    <https://example.org/aicog/context#> .
+@prefix eval:   <https://example.org/aicog/evaluation#> .
+@prefix dec:    <https://example.org/aicog/decision#> .
+@prefix auth:   <https://example.org/aicog/authorization#> .
+@prefix exec:   <https://example.org/aicog/execution#> .
+@prefix assure: <https://example.org/aicog/assurance#> .
+@prefix learn:  <https://example.org/aicog/learning#> .
+@prefix svc:    <https://example.org/aicog/service#> .
+@prefix intent: <https://example.org/aicog/intent#> .
+@prefix policy: <https://example.org/aicog/policy#> .
+@prefix plan:   <https://example.org/aicog/plan#> .
+@prefix infer:  <https://example.org/aicog/inference#> .
+@prefix trace:  <https://example.org/aicog/trace#> .
+@prefix domain: <https://example.org/aicog/domain#> .
+@prefix psl:    <https://example.org/aicog/psl#> .
+@prefix agent:  <https://example.org/aicog/agent#> .
+@prefix cdt:    <https://example.org/aicog/cdt#> .
+@prefix prov:   <http://www.w3.org/ns/prov#> .
+@prefix sosa:   <http://www.w3.org/ns/sosa/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Appendix A7 — Outcome Evidence, Assurance, and Governed Learning
+#################################################################
+
+<https://example.org/aicog/appendix-a/a7>
+    a owl:Ontology ;
+    rdfs:label "Appendix A7 — Outcome Evidence, Assurance, and Governed Learning"@en ;
+    rdfs:comment "Reviewer-revised, self-contained OWL/Turtle fragment for the Appendix A7 Protégé view. It preserves the semantic boundaries Outcome Evidence != Assurance Result != Learning Eligibility Assessment != Learning Update, and makes metric-unit conventions explicit."@en ;
+    owl:versionInfo "1.1.0" .
+
+#################################################################
+# Core classes
+#################################################################
+
+arch:CognitiveArtifact
+    a owl:Class ;
+    rdfs:label "Cognitive Artifact"@en .
+
+arch:EvidenceArtifact
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evidence Artifact"@en .
+
+arch:ExecutionContract
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Execution Contract"@en ;
+    rdfs:comment "Machine-interpretable specification of an authorized operational realization."@en .
+
+arch:OutcomeEvidence
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Outcome Evidence"@en ;
+    rdfs:comment "Post-realization evidence describing what was actually observed. Outcome Evidence is not an Assurance Result and does not by itself establish intent satisfaction."@en .
+
+arch:AssuranceResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Assurance Result"@en ;
+    rdfs:comment "Post-execution verification result derived from Outcome Evidence and evaluated against intent and objectives. Assurance is not Authorization."@en .
+
+arch:LearningEligibilityAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Learning Eligibility Assessment"@en ;
+    rdfs:comment "Determines whether assured evidence is eligible for a declared learning purpose. Eligibility may consider provenance, confidence, representativeness, policy, model scope, risk, and data-governance requirements."@en .
+
+arch:LearningUpdate
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Learning Update"@en ;
+    rdfs:comment "Governed adaptation artifact supported by an explicit Learning Eligibility Assessment. A Learning Update is not triggered directly by raw Outcome Evidence."@en .
+
+arch:Prediction
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Prediction"@en .
+
+arch:Service
+    a owl:Class ;
+    rdfs:label "Service"@en .
+
+arch:OperationalService
+    a owl:Class ;
+    rdfs:subClassOf arch:Service ;
+    rdfs:label "Operational Service"@en .
+
+arch:Intent
+    a owl:Class ;
+    rdfs:label "Intent"@en .
+
+arch:Objective
+    a owl:Class ;
+    rdfs:label "Objective"@en .
+
+arch:Policy
+    a owl:Class ;
+    rdfs:label "Policy"@en .
+
+arch:Constraint
+    a owl:Class ;
+    rdfs:label "Constraint"@en .
+
+#################################################################
+# Object properties
+#################################################################
+
+arch:evidenceFor
+    a owl:ObjectProperty ;
+    rdfs:domain arch:OutcomeEvidence ;
+    rdfs:range arch:ExecutionContract ;
+    rdfs:label "evidence for"@en ;
+    rdfs:comment "Associates observed post-realization evidence with the Execution Contract whose realization is being assessed."@en .
+
+arch:assesses
+    a owl:ObjectProperty ;
+    rdfs:domain arch:AssuranceResult ;
+    rdfs:range arch:OutcomeEvidence ;
+    rdfs:label "assesses"@en ;
+    rdfs:comment "Links an Assurance Result to the Outcome Evidence it verifies."@en .
+
+arch:assessesIntent
+    a owl:ObjectProperty ;
+    rdfs:domain arch:AssuranceResult ;
+    rdfs:range arch:Intent ;
+    rdfs:label "assesses intent"@en .
+
+arch:basedOnAssurance
+    a owl:ObjectProperty ;
+    rdfs:domain arch:LearningEligibilityAssessment ;
+    rdfs:range arch:AssuranceResult ;
+    rdfs:label "based on assurance"@en ;
+    rdfs:comment "Links a Learning Eligibility Assessment to the Assurance Result that qualifies the evidence for possible governed learning."@en .
+
+arch:supportedBy
+    a owl:ObjectProperty ;
+    rdfs:domain arch:LearningUpdate ;
+    rdfs:range arch:LearningEligibilityAssessment ;
+    rdfs:label "supported by"@en ;
+    rdfs:comment "Connects a governed Learning Update to the explicit eligibility assessment that supports it."@en .
+
+arch:realizesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ExecutionContract ;
+    rdfs:label "realizes decision"@en .
+
+arch:authorizedBy
+    a owl:ObjectProperty ;
+    rdfs:label "authorized by"@en .
+
+arch:appliesTo
+    a owl:ObjectProperty ;
+    rdfs:label "applies to"@en .
+
+arch:hasIntent
+    a owl:ObjectProperty ;
+    rdfs:range arch:Intent ;
+    rdfs:label "has intent"@en .
+
+arch:hasObjective
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Intent ;
+    rdfs:range arch:Objective ;
+    rdfs:label "has objective"@en .
+
+arch:governedBy
+    a owl:ObjectProperty ;
+    rdfs:range arch:Policy ;
+    rdfs:label "governed by"@en .
+
+arch:hasConstraint
+    a owl:ObjectProperty ;
+    rdfs:range arch:Constraint ;
+    rdfs:label "has constraint"@en .
+
+arch:predictsFor
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Prediction ;
+    rdfs:label "predicts for"@en .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+arch:observedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed latency in milliseconds"@en ;
+    rdfs:comment "Observed latency expressed in milliseconds."@en .
+
+arch:observedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed packet loss percent"@en ;
+    rdfs:comment "Observed packet loss expressed in percentage points. For example, 0.07 represents 0.07 percent packet loss, not a 0.07 fractional ratio."@en .
+
+arch:predictedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted latency in milliseconds"@en ;
+    rdfs:comment "Predicted latency expressed in milliseconds."@en .
+
+arch:predictedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted packet loss percent"@en ;
+    rdfs:comment "Predicted packet loss expressed in percentage points. For example, 0.06 represents 0.06 percent packet loss."@en .
+
+arch:executionStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "execution status"@en .
+
+arch:assuranceStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "assurance status"@en .
+
+arch:predictionErrorMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "prediction error in milliseconds"@en ;
+    rdfs:comment "Difference between predicted and observed latency, expressed in milliseconds, for the applicable assured outcome."@en .
+
+arch:hasConfidence
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has confidence"@en ;
+    rdfs:comment "Normalized dimensionless confidence on a 0–1 scale in this reference scenario. For example, 0.97 represents 97 percent confidence."@en .
+
+arch:eligibilityStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "eligibility status"@en .
+
+arch:learningScope
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "learning scope"@en .
+
+arch:updateStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "update status"@en .
+
+arch:observedAt
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "observed at"@en .
+
+#################################################################
+# OWL restrictions preserving semantic boundaries
+#################################################################
+
+arch:OutcomeEvidence
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:evidenceFor ;
+        owl:someValuesFrom arch:ExecutionContract
+    ] .
+
+arch:AssuranceResult
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:assesses ;
+        owl:someValuesFrom arch:OutcomeEvidence
+    ] .
+
+arch:LearningEligibilityAssessment
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:basedOnAssurance ;
+        owl:someValuesFrom arch:AssuranceResult
+    ] .
+
+arch:LearningUpdate
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty arch:supportedBy ;
+        owl:someValuesFrom arch:LearningEligibilityAssessment
+    ] .
+
+#################################################################
+# Supporting ABox individuals
+#################################################################
+
+svc:IndustrialControlService_001
+    a arch:OperationalService ;
+    rdfs:label "Industrial Control Service 001"@en .
+
+intent:LowLatencyContinuityIntent_001
+    a arch:Intent ;
+    rdfs:label "Low-Latency Continuity Intent 001"@en ;
+    arch:hasObjective intent:LatencyObjective_001,
+                      intent:PacketLossObjective_001 .
+
+intent:LatencyObjective_001
+    a arch:Objective ;
+    rdfs:label "Latency Objective 001"@en ;
+    rdfs:comment "End-to-end latency must remain below 20 ms."@en .
+
+intent:PacketLossObjective_001
+    a arch:Objective ;
+    rdfs:label "Packet-Loss Objective 001"@en ;
+    rdfs:comment "Packet loss must remain below 0.1 percent."@en .
+
+policy:ControlServicePolicy_001
+    a arch:Policy ;
+    rdfs:label "Control Service Policy 001"@en ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 .
+
+policy:NoInterruptionConstraint_001
+    a arch:Constraint ;
+    rdfs:label "No Interruption Constraint 001"@en ;
+    rdfs:comment "The active industrial control session must not be interrupted."@en .
+
+dec:DecisionResult_001
+    a arch:CognitiveArtifact ;
+    rdfs:label "Decision Result 001"@en .
+
+auth:Authorization_001
+    a arch:CognitiveArtifact ;
+    rdfs:label "Authorization 001"@en .
+
+exec:ExecutionContract_001
+    a arch:ExecutionContract ;
+    rdfs:label "Execution Contract 001"@en ;
+    arch:realizesDecision dec:DecisionResult_001 ;
+    arch:authorizedBy auth:Authorization_001 ;
+    arch:appliesTo svc:IndustrialControlService_001 ;
+    arch:hasConstraint policy:NoInterruptionConstraint_001 .
+
+plan:CoordinatedRecovery_001
+    a arch:CognitiveArtifact ;
+    rdfs:label "Coordinated Recovery 001"@en .
+
+cdt:FederatedPrediction_001
+    a arch:Prediction ;
+    rdfs:label "Federated Prediction 001"@en ;
+    arch:predictsFor plan:CoordinatedRecovery_001 ;
+    arch:predictedLatencyMs "16.0"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.06"^^xsd:decimal ;
+    arch:hasConfidence "0.93"^^xsd:decimal ;
+    rdfs:comment "Predictive evidence retained here only to make the assurance comparison interpretable. Prediction is not Outcome Evidence or Assurance Result."@en .
+
+#################################################################
+# Stage 7 — Outcome Evidence and Assurance Result
+#################################################################
+
+assure:OutcomeEvidence_001
+    a arch:OutcomeEvidence ;
+    rdfs:label "Outcome Evidence 001"@en ;
+    arch:evidenceFor exec:ExecutionContract_001 ;
+    arch:observedLatencyMs "16.8"^^xsd:decimal ;
+    arch:observedPacketLossPercent "0.07"^^xsd:decimal ;
+    arch:executionStatus "completed" ;
+    arch:observedAt "2026-09-15T12:10:00Z"^^xsd:dateTime ;
+    rdfs:comment "Post-realization observation. The values describe what occurred after execution and do not themselves assert that the intent was satisfied."@en .
+
+assure:AssuranceResult_001
+    a arch:AssuranceResult ;
+    rdfs:label "End-to-End Assurance Result 001"@en ;
+    arch:assesses assure:OutcomeEvidence_001 ;
+    arch:assessesIntent intent:LowLatencyContinuityIntent_001 ;
+    arch:assuranceStatus "satisfied" ;
+    arch:predictionErrorMs "0.8"^^xsd:decimal ;
+    arch:hasConfidence "0.97"^^xsd:decimal ;
+    rdfs:comment "Post-execution verification concludes that the end-to-end intent is satisfied based on Outcome Evidence. The latency prediction error is 0.8 ms relative to the 16.0 ms federated prediction. Assurance does not retroactively authorize execution."@en .
+
+#################################################################
+# Stage 8 — Learning Eligibility and Governed Learning Update
+#################################################################
+
+learn:LearningEligibility_001
+    a arch:LearningEligibilityAssessment ;
+    rdfs:label "Learning Eligibility Assessment 001"@en ;
+    arch:basedOnAssurance assure:AssuranceResult_001 ;
+    arch:eligibilityStatus "eligible" ;
+    arch:learningScope "cross-domain recovery model" ;
+    rdfs:comment "The assured outcome is eligible for the declared learning purpose. Eligibility is a separate governance boundary and is not implied merely by successful execution."@en .
+
+learn:LearningUpdate_001
+    a arch:LearningUpdate ;
+    rdfs:label "Learning Update 001"@en ;
+    arch:supportedBy learn:LearningEligibility_001 ;
+    arch:updateStatus "approved" ;
+    rdfs:comment "Governed learning update supported by explicit eligibility assessment. The update is not derived directly from raw Outcome Evidence."@en .
+
+#################################################################
+# Explicit semantic-boundary statements
+#################################################################
+
+arch:SemanticBoundaryDistinction_A7_001
+    a owl:NamedIndividual ;
+    rdfs:label "Execution is not Outcome"@en ;
+    rdfs:comment "Execution or completion status does not itself constitute post-realization Outcome Evidence."@en .
+
+arch:SemanticBoundaryDistinction_A7_002
+    a owl:NamedIndividual ;
+    rdfs:label "Outcome Evidence is not Assurance Result"@en ;
+    rdfs:comment "Outcome Evidence records what was observed; Assurance Result evaluates that evidence against intent, objectives, and other assurance conditions."@en .
+
+arch:SemanticBoundaryDistinction_A7_003
+    a owl:NamedIndividual ;
+    rdfs:label "Assurance Result is not Learning Eligibility"@en ;
+    rdfs:comment "An assured outcome is not automatically eligible for learning. Eligibility is assessed separately for a declared learning purpose."@en .
+
+arch:SemanticBoundaryDistinction_A7_004
+    a owl:NamedIndividual ;
+    rdfs:label "Learning Eligibility is not Learning Update"@en ;
+    rdfs:comment "Eligibility permits evidence to be considered for governed learning; a separate Learning Update artifact records the approved adaptation."@en .
+
+arch:NumericUnitConvention_A7
+    a owl:NamedIndividual ;
+    rdfs:label "Numeric Unit Convention — A7"@en ;
+    rdfs:comment "Confidence uses a normalized 0–1 scale. Packet-loss properties whose names end in Percent use percentage-point values. Thus 0.97 confidence means 97 percent confidence, while 0.07 packet loss means 0.07 percent packet loss."@en .
+
+#################################################################
+# SHACL profiles for executable validation
+#################################################################
+
+arch:OutcomeEvidenceShape
+    a sh:NodeShape ;
+    sh:targetClass arch:OutcomeEvidence ;
+    sh:property [
+        sh:path arch:evidenceFor ;
+        sh:class arch:ExecutionContract ;
+        sh:minCount 1 ;
+        sh:maxCount 1
+    ] ;
+    sh:property [
+        sh:path arch:observedLatencyMs ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0
+    ] ;
+    sh:property [
+        sh:path arch:observedPacketLossPercent ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 100
+    ] .
+
+arch:AssuranceResultShape
+    a sh:NodeShape ;
+    sh:targetClass arch:AssuranceResult ;
+    sh:property [
+        sh:path arch:assesses ;
+        sh:class arch:OutcomeEvidence ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path arch:hasConfidence ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1
+    ] .
+
+arch:LearningEligibilityAssessmentShape
+    a sh:NodeShape ;
+    sh:targetClass arch:LearningEligibilityAssessment ;
+    sh:property [
+        sh:path arch:basedOnAssurance ;
+        sh:class arch:AssuranceResult ;
+        sh:minCount 1 ;
+        sh:maxCount 1
+    ] ;
+    sh:property [
+        sh:path arch:eligibilityStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1
+    ] .
+
+arch:LearningUpdateShape
+    a sh:NodeShape ;
+    sh:targetClass arch:LearningUpdate ;
+    sh:property [
+        sh:path arch:supportedBy ;
+        sh:class arch:LearningEligibilityAssessment ;
+        sh:minCount 1 ;
+        sh:maxCount 1
+    ] ;
+    sh:property [
+        sh:path arch:updateStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1
+    ] .

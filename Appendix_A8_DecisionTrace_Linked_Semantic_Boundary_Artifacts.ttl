@@ -1,0 +1,758 @@
+@prefix arch:   <https://example.org/aicog/architecture#> .
+@prefix ctx:    <https://example.org/aicog/context#> .
+@prefix eval:   <https://example.org/aicog/evaluation#> .
+@prefix dec:    <https://example.org/aicog/decision#> .
+@prefix auth:   <https://example.org/aicog/authorization#> .
+@prefix exec:   <https://example.org/aicog/execution#> .
+@prefix assure: <https://example.org/aicog/assurance#> .
+@prefix learn:  <https://example.org/aicog/learning#> .
+@prefix svc:    <https://example.org/aicog/service#> .
+@prefix intent: <https://example.org/aicog/intent#> .
+@prefix policy: <https://example.org/aicog/policy#> .
+@prefix plan:   <https://example.org/aicog/plan#> .
+@prefix infer:  <https://example.org/aicog/inference#> .
+@prefix trace:  <https://example.org/aicog/trace#> .
+@prefix domain: <https://example.org/aicog/domain#> .
+@prefix psl:    <https://example.org/aicog/psl#> .
+@prefix agent:  <https://example.org/aicog/agent#> .
+@prefix cdt:    <https://example.org/aicog/cdt#> .
+@prefix prov:   <http://www.w3.org/ns/prov#> .
+@prefix sosa:   <http://www.w3.org/ns/sosa/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Appendix A8 — DecisionTrace and linked semantic boundary artifacts
+#################################################################
+
+<https://example.org/aicog/appendix-a/a8>
+    a owl:Ontology ;
+    rdfs:label "Appendix A8 — DecisionTrace and Linked Semantic Boundary Artifacts"@en ;
+    rdfs:comment "Reviewer-revised, self-contained OWL/Turtle fragment for the Appendix A8 Protégé view. DecisionTrace is modeled as a cross-cutting semantic chain of custody, not as an additional lifecycle stage or an exhaustive log of internal cognition."@en ;
+    owl:versionInfo "1.1.0" .
+
+#################################################################
+# Core artifact classes
+#################################################################
+
+arch:CognitiveArtifact
+    a owl:Class ;
+    rdfs:label "Cognitive Artifact"@en .
+
+arch:EvidenceArtifact
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evidence Artifact"@en .
+
+arch:ContextObject
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Context Object"@en .
+
+arch:InferenceResult
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Inference Result"@en .
+
+arch:EvaluationContext
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evaluation Context"@en .
+
+arch:EvaluationResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Evaluation Result"@en .
+
+arch:CandidateAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:EvaluationResult ;
+    rdfs:label "Candidate Assessment"@en ;
+    rdfs:comment "Candidate Plan Assessment represented as a specialized Evaluation Result. It does not itself select or authorize a plan."@en .
+
+arch:CandidatePlan
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Candidate Plan"@en .
+
+arch:Prediction
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Prediction"@en .
+
+arch:DecisionResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Decision Result"@en .
+
+arch:GovernanceAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Governance Assessment"@en .
+
+arch:Authorization
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Authorization"@en .
+
+arch:ExecutionContract
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Execution Contract"@en .
+
+arch:OutcomeEvidence
+    a owl:Class ;
+    rdfs:subClassOf arch:EvidenceArtifact ;
+    rdfs:label "Outcome Evidence"@en .
+
+arch:AssuranceResult
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Assurance Result"@en .
+
+arch:LearningEligibilityAssessment
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Learning Eligibility Assessment"@en .
+
+arch:LearningUpdate
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "Learning Update"@en .
+
+#################################################################
+# DecisionTrace classes
+#################################################################
+
+arch:DecisionTrace
+    a owl:Class ;
+    rdfs:subClassOf arch:CognitiveArtifact ;
+    rdfs:label "DecisionTrace"@en ;
+    rdfs:comment "Cross-cutting semantic chain of custody linking consequential evidence and boundary artifacts needed to understand, govern, challenge, execute, audit, verify, assure, and learn from an autonomous decision episode."@en .
+
+arch:TraceProfile
+    a owl:Class ;
+    rdfs:label "Trace Profile"@en ;
+    rdfs:comment "Declares purpose-relative minimum coverage for a DecisionTrace. Trace completeness is evaluated relative to the declared purpose, not by recording every internal cognitive operation."@en .
+
+arch:DecisionTraceRepository
+    a owl:Class ;
+    rdfs:label "DecisionTrace Repository"@en ;
+    rdfs:comment "Logical repository responsibility for governed, queryable, auditable, integrity-preserving DecisionTrace access. It may be physically distributed or federated across administrative domains."@en .
+
+#################################################################
+# Supporting classes
+#################################################################
+
+arch:Service
+    a owl:Class ;
+    rdfs:label "Service"@en .
+
+arch:Intent
+    a owl:Class ;
+    rdfs:label "Intent"@en .
+
+arch:Policy
+    a owl:Class ;
+    rdfs:label "Policy"@en .
+
+#################################################################
+# Object properties
+#################################################################
+
+arch:tracesArtifact
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionTrace ;
+    rdfs:range arch:CognitiveArtifact ;
+    rdfs:label "traces artifact"@en ;
+    rdfs:comment "Links a DecisionTrace to a semantically consequential artifact included for the declared trace purpose."@en .
+
+arch:conformsToTraceProfile
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionTrace ;
+    rdfs:range arch:TraceProfile ;
+    rdfs:label "conforms to trace profile"@en .
+
+arch:storedInRepository
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionTrace ;
+    rdfs:range arch:DecisionTraceRepository ;
+    rdfs:label "stored in repository"@en ;
+    rdfs:comment "Associates a trace with the logical repository responsibility through which it is governed and queried."@en .
+
+arch:requiresArtifactClass
+    a owl:ObjectProperty ;
+    rdfs:domain arch:TraceProfile ;
+    rdfs:range owl:Class ;
+    rdfs:label "requires artifact class"@en ;
+    rdfs:comment "Declares a minimum artifact class expected for the purpose represented by a Trace Profile."@en .
+
+arch:derivedFrom
+    a owl:ObjectProperty ;
+    rdfs:label "derived from"@en .
+
+arch:resultOf
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:EvaluationContext ;
+    rdfs:label "result of"@en .
+
+arch:evaluatesCandidate
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:CandidatePlan ;
+    rdfs:label "evaluates candidate"@en .
+
+arch:supportedByPrediction
+    a owl:ObjectProperty ;
+    rdfs:domain arch:EvaluationResult ;
+    rdfs:range arch:Prediction ;
+    rdfs:label "supported by prediction"@en .
+
+arch:basedOnEvaluation
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionResult ;
+    rdfs:range arch:EvaluationResult ;
+    rdfs:label "based on evaluation"@en .
+
+arch:selectedCandidate
+    a owl:ObjectProperty ;
+    rdfs:domain arch:DecisionResult ;
+    rdfs:range arch:CandidatePlan ;
+    rdfs:label "selected candidate"@en .
+
+arch:assessesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:GovernanceAssessment ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "assesses decision"@en .
+
+arch:hasGovernanceAssessment
+    a owl:ObjectProperty ;
+    rdfs:range arch:GovernanceAssessment ;
+    rdfs:label "has governance assessment"@en .
+
+arch:authorizesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:Authorization ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "authorizes decision"@en .
+
+arch:realizesDecision
+    a owl:ObjectProperty ;
+    rdfs:domain arch:ExecutionContract ;
+    rdfs:range arch:DecisionResult ;
+    rdfs:label "realizes decision"@en .
+
+arch:authorizedBy
+    a owl:ObjectProperty ;
+    rdfs:label "authorized by"@en .
+
+arch:evidenceFor
+    a owl:ObjectProperty ;
+    rdfs:domain arch:OutcomeEvidence ;
+    rdfs:range arch:ExecutionContract ;
+    rdfs:label "evidence for"@en .
+
+arch:assesses
+    a owl:ObjectProperty ;
+    rdfs:domain arch:AssuranceResult ;
+    rdfs:range arch:OutcomeEvidence ;
+    rdfs:label "assesses"@en .
+
+arch:basedOnAssurance
+    a owl:ObjectProperty ;
+    rdfs:domain arch:LearningEligibilityAssessment ;
+    rdfs:range arch:AssuranceResult ;
+    rdfs:label "based on assurance"@en .
+
+arch:supportedBy
+    a owl:ObjectProperty ;
+    rdfs:domain arch:LearningUpdate ;
+    rdfs:range arch:LearningEligibilityAssessment ;
+    rdfs:label "supported by"@en .
+
+arch:hasIntent
+    a owl:ObjectProperty ;
+    rdfs:range arch:Intent ;
+    rdfs:label "has intent"@en .
+
+arch:governedBy
+    a owl:ObjectProperty ;
+    rdfs:range arch:Policy ;
+    rdfs:label "governed by"@en .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+arch:tracePurpose
+    a owl:DatatypeProperty ;
+    rdfs:domain arch:DecisionTrace ;
+    rdfs:range xsd:string ;
+    rdfs:label "trace purpose"@en .
+
+arch:traceStatus
+    a owl:DatatypeProperty ;
+    rdfs:domain arch:DecisionTrace ;
+    rdfs:range xsd:string ;
+    rdfs:label "trace status"@en .
+
+arch:profilePurpose
+    a owl:DatatypeProperty ;
+    rdfs:domain arch:TraceProfile ;
+    rdfs:range xsd:string ;
+    rdfs:label "profile purpose"@en .
+
+arch:traceStage
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "trace stage"@en ;
+    rdfs:comment "Human-readable lifecycle-stage annotation. Stage 4 is named Planning, Prediction, and Candidate Assessment."@en .
+
+arch:ontologyVersion
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "ontology version"@en .
+
+arch:knowledgeVersion
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "knowledge version"@en .
+
+arch:hasConfidence
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has confidence"@en ;
+    rdfs:comment "Normalized dimensionless confidence on a 0–1 scale in this reference scenario."@en .
+
+arch:hasRiskScore
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has risk score"@en ;
+    rdfs:comment "Model-dependent normalized risk score on a 0–1 scale in this reference scenario; larger values indicate greater assessed risk."@en .
+
+arch:hasTrustScore
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has trust score"@en ;
+    rdfs:comment "Model-dependent normalized trust score on a 0–1 scale in this reference scenario; larger values indicate greater assessed trust."@en .
+
+arch:predictedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted latency in milliseconds"@en .
+
+arch:predictedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "predicted packet loss percent"@en ;
+    rdfs:comment "Percentage-point value: 0.06 means 0.06 percent packet loss."@en .
+
+arch:observedLatencyMs
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed latency in milliseconds"@en .
+
+arch:observedPacketLossPercent
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "observed packet loss percent"@en ;
+    rdfs:comment "Percentage-point value: 0.07 means 0.07 percent packet loss."@en .
+
+arch:evaluationStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "evaluation status"@en .
+
+arch:hasDecisionStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "decision status"@en .
+
+arch:governanceStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "governance status"@en .
+
+arch:authorizationStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "authorization status"@en .
+
+arch:executionStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "execution status"@en .
+
+arch:assuranceStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "assurance status"@en .
+
+arch:eligibilityStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "eligibility status"@en .
+
+arch:updateStatus
+    a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "update status"@en .
+
+#################################################################
+# Minimal supporting ABox used by the trace
+#################################################################
+
+svc:IndustrialControlService_001
+    a arch:Service ;
+    rdfs:label "Industrial Control Service 001"@en .
+
+intent:LowLatencyContinuityIntent_001
+    a arch:Intent ;
+    rdfs:label "Low-Latency Continuity Intent 001"@en .
+
+policy:ControlServicePolicy_001
+    a arch:Policy ;
+    rdfs:label "Control Service Policy 001"@en .
+
+#################################################################
+# Stage 1 — Runtime Evidence and Context
+#################################################################
+
+ctx:ControlServiceContext_001
+    a arch:ContextObject ;
+    rdfs:label "Control Service Context 001"@en ;
+    arch:hasIntent intent:LowLatencyContinuityIntent_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasConfidence "0.95"^^xsd:decimal ;
+    arch:traceStage "1. Runtime Evidence and Context" .
+
+#################################################################
+# Stage 2 — Inference and Supporting Evidence
+#################################################################
+
+infer:CrossDomainDegradation_001
+    a arch:InferenceResult ;
+    rdfs:label "Cross-Domain Degradation 001"@en ;
+    arch:derivedFrom ctx:ControlServiceContext_001 ;
+    arch:hasConfidence "0.91"^^xsd:decimal ;
+    arch:traceStage "2. Inference and Supporting Evidence" .
+
+#################################################################
+# Stage 3 — Evaluation Context and Evaluation Result
+#################################################################
+
+eval:EvaluationContext_001
+    a arch:EvaluationContext ;
+    rdfs:label "Evaluation Context 001"@en ;
+    arch:traceStage "3. Evaluation Context and Evaluation Result" .
+
+eval:EvaluationResult_001
+    a arch:EvaluationResult ;
+    rdfs:label "Evaluation Result 001 — Intent Violated"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluationStatus "intent-violated" ;
+    arch:hasConfidence "0.96"^^xsd:decimal ;
+    arch:traceStage "3. Evaluation Context and Evaluation Result" .
+
+#################################################################
+# Stage 4 — Planning, Prediction, and Candidate Assessment
+#################################################################
+
+plan:CoordinatedRecovery_001
+    a arch:CandidatePlan ;
+    rdfs:label "Coordinated Recovery 001"@en ;
+    arch:traceStage "4. Planning, Prediction, and Candidate Assessment" .
+
+cdt:FederatedPrediction_001
+    a arch:Prediction ;
+    rdfs:label "Federated Prediction 001"@en ;
+    arch:predictedLatencyMs "16.0"^^xsd:decimal ;
+    arch:predictedPacketLossPercent "0.06"^^xsd:decimal ;
+    arch:hasConfidence "0.93"^^xsd:decimal ;
+    arch:traceStage "4. Planning, Prediction, and Candidate Assessment" .
+
+eval:CandidateAssessment_004
+    a arch:CandidateAssessment ;
+    rdfs:label "Candidate Plan Assessment 004 — Coordinated Recovery"@en ;
+    arch:resultOf eval:EvaluationContext_001 ;
+    arch:evaluatesCandidate plan:CoordinatedRecovery_001 ;
+    arch:supportedByPrediction cdt:FederatedPrediction_001 ;
+    arch:evaluationStatus "objectives-satisfied" ;
+    arch:hasConfidence "0.93"^^xsd:decimal ;
+    arch:traceStage "4. Planning, Prediction, and Candidate Assessment" ;
+    rdfs:comment "Candidate-specific Evaluation Result concluding that coordinated recovery satisfies the declared objectives. This artifact does not select or authorize the plan."@en .
+
+#################################################################
+# Stage 5 — Decision Result and Authorization
+#################################################################
+
+dec:DecisionResult_001
+    a arch:DecisionResult ;
+    rdfs:label "Decision Result 001 — Coordinated Recovery Selected"@en ;
+    arch:basedOnEvaluation eval:CandidateAssessment_004 ;
+    arch:selectedCandidate plan:CoordinatedRecovery_001 ;
+    arch:hasDecisionStatus "selected" ;
+    arch:hasConfidence "0.92"^^xsd:decimal ;
+    arch:traceStage "5. Decision Result and Authorization" .
+
+auth:GovernanceAssessment_001
+    a arch:GovernanceAssessment ;
+    rdfs:label "Governance Assessment 001"@en ;
+    arch:assessesDecision dec:DecisionResult_001 ;
+    arch:governedBy policy:ControlServicePolicy_001 ;
+    arch:hasRiskScore "0.18"^^xsd:decimal ;
+    arch:hasTrustScore "0.91"^^xsd:decimal ;
+    arch:governanceStatus "acceptable" ;
+    arch:traceStage "5. Decision Result and Authorization" ;
+    rdfs:comment "Governance Assessment is distinct from Authorization. Risk and trust scores are illustrative model-dependent 0–1 scores."@en .
+
+dec:DecisionResult_001
+    arch:hasGovernanceAssessment auth:GovernanceAssessment_001 .
+
+auth:Authorization_001
+    a arch:Authorization ;
+    rdfs:label "Authorization 001"@en ;
+    arch:authorizesDecision dec:DecisionResult_001 ;
+    arch:hasGovernanceAssessment auth:GovernanceAssessment_001 ;
+    arch:authorizationStatus "granted" ;
+    arch:traceStage "5. Decision Result and Authorization" .
+
+#################################################################
+# Stage 6 — Execution Contract and Operational Realization
+#################################################################
+
+exec:ExecutionContract_001
+    a arch:ExecutionContract ;
+    rdfs:label "Execution Contract 001"@en ;
+    arch:realizesDecision dec:DecisionResult_001 ;
+    arch:authorizedBy auth:Authorization_001 ;
+    arch:traceStage "6. Execution Contract and Operational Realization" ;
+    rdfs:comment "Execution Contract records the authorized realization commitment. Operational realization itself remains distinct from the semantic contract."@en .
+
+#################################################################
+# Stage 7 — Outcome Evidence and Assurance
+#################################################################
+
+assure:OutcomeEvidence_001
+    a arch:OutcomeEvidence ;
+    rdfs:label "Outcome Evidence 001"@en ;
+    arch:evidenceFor exec:ExecutionContract_001 ;
+    arch:observedLatencyMs "16.8"^^xsd:decimal ;
+    arch:observedPacketLossPercent "0.07"^^xsd:decimal ;
+    arch:executionStatus "completed" ;
+    arch:traceStage "7. Outcome Evidence and Assurance" .
+
+assure:AssuranceResult_001
+    a arch:AssuranceResult ;
+    rdfs:label "End-to-End Assurance Result 001"@en ;
+    arch:assesses assure:OutcomeEvidence_001 ;
+    arch:assuranceStatus "satisfied" ;
+    arch:hasConfidence "0.97"^^xsd:decimal ;
+    arch:traceStage "7. Outcome Evidence and Assurance" .
+
+#################################################################
+# Stage 8 — Learning and Governed Adaptation
+#################################################################
+
+learn:LearningEligibility_001
+    a arch:LearningEligibilityAssessment ;
+    rdfs:label "Learning Eligibility Assessment 001"@en ;
+    arch:basedOnAssurance assure:AssuranceResult_001 ;
+    arch:eligibilityStatus "eligible" ;
+    arch:traceStage "8. Learning and Governed Adaptation" .
+
+learn:LearningUpdate_001
+    a arch:LearningUpdate ;
+    rdfs:label "Learning Update 001"@en ;
+    arch:supportedBy learn:LearningEligibility_001 ;
+    arch:updateStatus "approved" ;
+    arch:traceStage "8. Learning and Governed Adaptation" .
+
+#################################################################
+# DecisionTrace profiles
+#################################################################
+
+trace:MinimalDecisionProfile
+    a arch:TraceProfile ;
+    rdfs:label "Minimal Decision Profile"@en ;
+    arch:profilePurpose "explanation-and-decision-review" ;
+    arch:requiresArtifactClass arch:EvaluationContext,
+                               arch:EvaluationResult,
+                               arch:DecisionResult .
+
+trace:AuthorizedExecutionProfile
+    a arch:TraceProfile ;
+    rdfs:label "Authorized Execution Profile"@en ;
+    arch:profilePurpose "authorization-and-execution-audit" ;
+    arch:requiresArtifactClass arch:EvaluationContext,
+                               arch:EvaluationResult,
+                               arch:DecisionResult,
+                               arch:GovernanceAssessment,
+                               arch:Authorization,
+                               arch:ExecutionContract .
+
+trace:AssuredOutcomeProfile
+    a arch:TraceProfile ;
+    rdfs:label "Assured Outcome Profile"@en ;
+    arch:profilePurpose "post-execution-assurance-and-verification" ;
+    arch:requiresArtifactClass arch:DecisionResult,
+                               arch:Authorization,
+                               arch:ExecutionContract,
+                               arch:OutcomeEvidence,
+                               arch:AssuranceResult .
+
+trace:LearningProfile
+    a arch:TraceProfile ;
+    rdfs:label "Learning Profile"@en ;
+    arch:profilePurpose "governed-learning-provenance" ;
+    arch:requiresArtifactClass arch:OutcomeEvidence,
+                               arch:AssuranceResult,
+                               arch:LearningEligibilityAssessment,
+                               arch:LearningUpdate .
+
+#################################################################
+# Logical/federated repository responsibility
+#################################################################
+
+trace:DecisionTraceRepository_001
+    a arch:DecisionTraceRepository ;
+    rdfs:label "DecisionTrace Repository 001"@en ;
+    rdfs:comment "Logical, governable, queryable, and auditable repository responsibility. It may be physically distributed or federated; this model does not require a centralized database. Historical integrity should be preserved using implementation-appropriate tamper-evident or append-controlled mechanisms."@en .
+
+#################################################################
+# Focal DecisionTrace
+#################################################################
+
+trace:DecisionTrace_001
+    a arch:DecisionTrace ;
+    rdfs:label "DecisionTrace 001 — Coordinated Recovery Episode"@en ;
+    arch:tracePurpose "execution-audit-assurance-and-governed-learning" ;
+    arch:traceStatus "principal-episode-complete" ;
+    arch:conformsToTraceProfile trace:LearningProfile ;
+    arch:storedInRepository trace:DecisionTraceRepository_001 ;
+    arch:tracesArtifact
+        ctx:ControlServiceContext_001,
+        infer:CrossDomainDegradation_001,
+        eval:EvaluationContext_001,
+        eval:EvaluationResult_001,
+        plan:CoordinatedRecovery_001,
+        cdt:FederatedPrediction_001,
+        eval:CandidateAssessment_004,
+        dec:DecisionResult_001,
+        auth:GovernanceAssessment_001,
+        auth:Authorization_001,
+        exec:ExecutionContract_001,
+        assure:OutcomeEvidence_001,
+        assure:AssuranceResult_001,
+        learn:LearningEligibility_001,
+        learn:LearningUpdate_001 ;
+    arch:ontologyVersion "AICOG-Reference-1.1" ;
+    arch:knowledgeVersion "SKF-Reference-1.1" ;
+    rdfs:comment "Purpose-relative DecisionTrace linking the semantically consequential artifacts of the reference scenario. It is not an exhaustive log of internal reasoning, model activations, private agent searches, or every intermediate computation."@en .
+
+#################################################################
+# Purpose-relative provenance principle
+#################################################################
+
+trace:CognitiveProvenanceCompletenessPrinciple
+    a owl:NamedIndividual ;
+    rdfs:label "Cognitive Provenance Completeness — Purpose-Relative Principle"@en ;
+    rdfs:comment "Consistent with the Cognitive Provenance Completeness model developed earlier in the book: a DecisionTrace is sufficiently complete when it preserves the consequential artifacts and semantic relationships required for the declared explanation, governance, audit, assurance, verification, or learning purpose. Completeness does not require recording every internal cognitive operation."@en .
+
+trace:DecisionTraceIsNotPSL
+    a owl:NamedIndividual ;
+    rdfs:label "DecisionTrace and PSL are distinct"@en ;
+    rdfs:comment "DecisionTrace records the semantic chain of custody of consequential artifacts. PSL represents and traces the behavioral semantics of processes of interest. PSL may help interpret trace content but does not become the trace itself."@en .
+
+trace:DecisionTraceIsNotLifecycleStage
+    a owl:NamedIndividual ;
+    rdfs:label "DecisionTrace is not a lifecycle stage"@en ;
+    rdfs:comment "DecisionTrace operates across the lifecycle and is not a ninth stage."@en .
+
+trace:NumericUnitConvention_A8
+    a owl:NamedIndividual ;
+    rdfs:label "Numeric Unit Convention — A8"@en ;
+    rdfs:comment "Confidence uses a normalized 0–1 scale. Illustrative risk and trust scores use model-dependent normalized 0–1 scales. Packet-loss properties ending in Percent use percentage-point values: 0.06 means 0.06 percent, not 6 percent."@en .
+
+#################################################################
+# SHACL validation profiles
+#################################################################
+
+arch:DecisionTraceShape
+    a sh:NodeShape ;
+    sh:targetClass arch:DecisionTrace ;
+    sh:property [
+        sh:path arch:tracePurpose ;
+        sh:datatype xsd:string ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path arch:conformsToTraceProfile ;
+        sh:class arch:TraceProfile ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path arch:storedInRepository ;
+        sh:class arch:DecisionTraceRepository ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path arch:tracesArtifact ;
+        sh:class arch:CognitiveArtifact ;
+        sh:minCount 1
+    ] .
+
+arch:DecisionTraceConfidenceShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf arch:hasConfidence ;
+    sh:property [
+        sh:path arch:hasConfidence ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1
+    ] .
+
+arch:RiskScoreShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf arch:hasRiskScore ;
+    sh:property [
+        sh:path arch:hasRiskScore ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1
+    ] .
+
+arch:TrustScoreShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf arch:hasTrustScore ;
+    sh:property [
+        sh:path arch:hasTrustScore ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1
+    ] .
+
+arch:PredictedPacketLossPercentShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf arch:predictedPacketLossPercent ;
+    sh:property [
+        sh:path arch:predictedPacketLossPercent ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 100
+    ] .
+
+arch:ObservedPacketLossPercentShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf arch:observedPacketLossPercent ;
+    sh:property [
+        sh:path arch:observedPacketLossPercent ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 100
+    ] .
